@@ -101,7 +101,7 @@ export const menuData = {
       prepTime: 12
     },
     {
-      id: 8,
+      id: 9,
       name: "Veg Biryani",
       price: 225,
       image: "https://www.cookwithmanali.com/wp-content/uploads/2019/09/Vegetable-Biryani-Restaurant-Style.jpg",
