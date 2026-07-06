@@ -38,6 +38,13 @@
     color: #ffffff !important;
   }
   
+  /* Force header SVG icons (logo, cart, menu drawer) to be bright white */
+  header svg,
+  header svg * {
+    stroke: #ffffff !important;
+    color: #ffffff !important;
+  }
+  
   /* Force stepper minus and plus SVGs to be dark forest green */
   [class*="bg-brand-maroon-900"] svg,
   [class*="bg-brand-maroon-900"] svg * {
