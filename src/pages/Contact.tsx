@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Phone, Mail, Send, Linkedin, Github, Facebook } from 'lucide-react';
+import { MapPin, Phone, Mail, Send, Instagram, Twitter, Facebook } from 'lucide-react';
 
 const Contact: React.FC = () => {
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
@@ -91,17 +91,16 @@ const Contact: React.FC = () => {
             </div>
           </div>
 
-          {/* Social Connect */}
           <div className="space-y-3 pt-6 border-t border-brand-maroon-800/30">
             <span className="text-brand-offwhite/40 block text-xs font-bold uppercase tracking-wider">Connect With Us</span>
             <div className="flex gap-3">
-              <a href="#" className="bg-brand-orange/5 border border-brand-maroon-800/35 hover:bg-brand-orange/10 p-3 rounded-xl text-brand-orange transition-colors">
-                <Linkedin className="w-5 h-5" />
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="bg-brand-orange/5 border border-brand-maroon-800/35 hover:bg-brand-orange/10 p-3 rounded-xl text-brand-orange transition-colors">
+                <Instagram className="w-5 h-5" />
               </a>
-              <a href="#" className="bg-brand-orange/5 border border-brand-maroon-800/35 hover:bg-brand-orange/10 p-3 rounded-xl text-brand-orange transition-colors">
-                <Github className="w-5 h-5" />
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="bg-brand-orange/5 border border-brand-maroon-800/35 hover:bg-brand-orange/10 p-3 rounded-xl text-brand-orange transition-colors">
+                <Twitter className="w-5 h-5" />
               </a>
-              <a href="#" className="bg-brand-orange/5 border border-brand-maroon-800/35 hover:bg-brand-orange/10 p-3 rounded-xl text-brand-orange transition-colors">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="bg-brand-orange/5 border border-brand-maroon-800/35 hover:bg-brand-orange/10 p-3 rounded-xl text-brand-orange transition-colors">
                 <Facebook className="w-5 h-5" />
               </a>
             </div>
