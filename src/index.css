@@ -38,11 +38,24 @@
     color: #ffffff !important;
   }
   
-  /* Force header SVG icons (logo, cart, menu drawer) to be bright white */
+  /* Make header buttons and SVGs unconditionally white */
+  header button,
+  header button *,
   header svg,
-  header svg * {
+  header svg path,
+  header svg circle,
+  header svg polyline,
+  header svg line,
+  header svg rect {
     stroke: #ffffff !important;
     color: #ffffff !important;
+  }
+  
+  /* Keep logo flame in header gold/green and filled */
+  header .text-brand-gold,
+  header .text-brand-gold * {
+    stroke: #6B9071 !important;
+    fill: #6B9071 !important;
   }
   
   /* Force stepper minus and plus SVGs to be dark forest green */
