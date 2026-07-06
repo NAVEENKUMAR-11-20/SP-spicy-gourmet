@@ -1,43 +1,37 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Flame, Leaf } from 'lucide-react';
-import { menuData } from '../data/menuData';
+import { useCart } from '../context/CartContext';
 import DishCard from '../components/ui/DishCard';
 
 const FullMenu: React.FC = () => {
+  const { foodItems, loadingItems } = useCart();
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState<'all' | 'veg' | 'non-veg' | 'spicy'>('all');
 
-  // Combine and format data
-  const allDishes = useMemo(() => {
-    return [
-      ...menuData.veg.map(d => ({ ...d, isVeg: true })),
-      ...menuData['non-veg'].map(d => ({ ...d, isVeg: false }))
-    ];
-  }, []);
-
   // Extract unique categories (capitalize them for display)
   const categories = useMemo(() => {
-    const cats = Array.from(new Set(allDishes.map(d => d.category)));
+    const cats = Array.from(new Set(foodItems.map(d => d.category)));
     return cats.sort();
-  }, [allDishes]);
+  }, [foodItems]);
 
   // Filter dishes
   const filteredDishes = useMemo(() => {
-    return allDishes.filter(dish => {
+    return foodItems.filter(dish => {
       // Text search
       const matchesSearch = dish.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                             dish.description.toLowerCase().includes(searchTerm.toLowerCase());
       if (!matchesSearch) return false;
 
       // Chip filters
-      if (filter === 'veg') return dish.isVeg;
-      if (filter === 'non-veg') return !dish.isVeg;
-      if (filter === 'spicy') return dish.spiceLevel > 1;
+      const isVeg = dish.vegType === 'Veg';
+      if (filter === 'veg') return isVeg;
+      if (filter === 'non-veg') return !isVeg;
+      if (filter === 'spicy') return dish.spiceLevel === 'Spicy' || dish.spiceLevel === 'Medium';
       
       return true;
     });
-  }, [allDishes, searchTerm, filter]);
+  }, [foodItems, searchTerm, filter]);
 
   // Scroll to category
   const scrollToCategory = (category: string) => {
@@ -47,6 +41,15 @@ const FullMenu: React.FC = () => {
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
+
+  if (loadingItems && foodItems.length === 0) {
+    return (
+      <div className="py-24 text-center space-y-4">
+        <div className="w-12 h-12 border-4 border-brand-orange border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <p className="text-brand-offwhite/60">Loading gourmet delicacies...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="pb-24">

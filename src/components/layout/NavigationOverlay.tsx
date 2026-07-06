@@ -13,12 +13,14 @@ const navLinks = [
   { path: '/menu', label: 'Full Menu' },
   { path: '/specials', label: 'Chef\'s Specials' },
   { path: '/offers', label: 'Combo Deals' },
+  { path: '/lookup', label: 'Track Order' },
   { path: '/about', label: 'About Us' },
   { path: '/gallery', label: 'Gallery' },
   { path: '/reviews', label: 'Reviews' },
   { path: '/faq', label: 'FAQ' },
   { path: '/contact', label: 'Contact Us' },
   { path: '/location', label: 'Location & Hours' },
+  { path: '/admin/login', label: 'Staff POS Portal' },
 ];
 
 const NavigationOverlay: React.FC<NavigationOverlayProps> = ({ isOpen, onClose }) => {
