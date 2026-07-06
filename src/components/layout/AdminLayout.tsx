@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -10,13 +10,15 @@ import {
   BarChart3, 
   LogOut,
   Bell,
-  Settings
+  Menu,
+  X
 } from 'lucide-react';
 import { pb } from '../../api/pocketbase';
 
 const AdminLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleLogout = () => {
     pb.authStore.clear();
@@ -34,19 +36,40 @@ const AdminLayout: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col justify-between p-6 shrink-0">
+    <div className="min-h-screen bg-gray-50 flex overflow-x-hidden">
+      {/* Mobile Sidebar Drawer Backdrop */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar - responsive container translation */}
+      <aside 
+        className={`fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200 flex flex-col justify-between p-6 shrink-0 z-50 transform transition-transform duration-300 lg:translate-x-0 lg:static ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
         <div className="space-y-8">
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="bg-emerald-600 p-2.5 rounded-xl text-white">
-              <ChefHat className="w-6 h-6" />
+          {/* Logo & Mobile Close Button */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="bg-emerald-600 p-2.5 rounded-xl text-white">
+                <ChefHat className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="font-bold text-gray-900 leading-tight">SP SPICY</h2>
+                <span className="text-xs text-gray-500 font-bold tracking-widest uppercase">Admin Panel</span>
+              </div>
             </div>
-            <div>
-              <h2 className="font-bold text-gray-900 leading-tight">SP SPICY</h2>
-              <span className="text-xs text-gray-500 font-bold tracking-widest uppercase">Admin Panel</span>
-            </div>
+            
+            <button 
+              onClick={() => setIsSidebarOpen(false)}
+              className="lg:hidden p-1.5 rounded-lg hover:bg-gray-100 text-gray-500"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
 
           {/* Navigation Links */}
@@ -59,6 +82,7 @@ const AdminLayout: React.FC = () => {
                 <Link
                   key={item.label}
                   to={item.path}
+                  onClick={() => setIsSidebarOpen(false)}
                   className={`flex items-center gap-3 px-4 py-3.5 rounded-xl font-medium text-sm transition-all ${
                     isActive
                       ? 'bg-emerald-50 text-emerald-700 shadow-sm'
@@ -86,11 +110,22 @@ const AdminLayout: React.FC = () => {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col min-h-screen min-w-0">
         {/* Top Header */}
-        <header className="h-16 bg-white border-b border-gray-200 px-8 flex items-center justify-between sticky top-0 z-30">
-          <div className="text-lg font-bold text-gray-800">
-            Welcome, Staff User
+        <header className="h-16 bg-white border-b border-gray-200 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
+          <div className="flex items-center gap-3">
+            {/* Hamburger button on mobile */}
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-500 shrink-0"
+              aria-label="Open sidebar menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            
+            <div className="text-base sm:text-lg font-bold text-gray-800 line-clamp-1">
+              Welcome, Staff User
+            </div>
           </div>
 
           <div className="flex items-center gap-4">
@@ -102,8 +137,8 @@ const AdminLayout: React.FC = () => {
           </div>
         </header>
 
-        {/* Dynamic View Outlet */}
-        <main className="flex-1 p-8 overflow-y-auto">
+        {/* Dynamic View Outlet - responsive padding */}
+        <main className="flex-1 p-4 sm:p-8 overflow-y-auto">
           <Outlet />
         </main>
       </div>
