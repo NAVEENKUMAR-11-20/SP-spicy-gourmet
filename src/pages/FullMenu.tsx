@@ -121,8 +121,7 @@ const FullMenu: React.FC = () => {
                 </h2>
                 <div className="flex-1 h-[1px] bg-brand-maroon-800/80"></div>
               </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
                 {categoryDishes.map(dish => (
                   <motion.div
                     key={dish.id}
