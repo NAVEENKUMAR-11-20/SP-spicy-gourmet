@@ -14,9 +14,7 @@
     font-weight: 600 !important;
   }
 
-  /* Exclude dark containers, headers, action buttons, and status alerts to keep white text */
-  button, 
-  button *, 
+  /* Exclude dark containers, headers, active tabs, and status alerts to keep white text */
   a.bg-brand-orange, 
   a.bg-brand-orange *, 
   header, 
