@@ -4,24 +4,57 @@
 
 @layer base {
   body {
-    background-color: #E6F2EC !important;
-    color: #1D3525 !important;
+    background-color: #E3EED4 !important;
+    color: #0F2A1D !important;
   }
   
-  /* Force elegant olive green for restaurant headings */
-  h1, h2, h3, h4, h5, h6 {
-    color: #2D4A36 !important;
+  /* Darken and bolden all text elements globally for extreme readability */
+  p, span, label, h1, h2, h3, h4, h5, h6, strong, td, th, a, li {
+    color: #0F2A1D !important;
+    font-weight: 600 !important;
+  }
+
+  /* Exclude dark containers, headers, action buttons, and status alerts to keep white text */
+  button, 
+  button *, 
+  a.bg-brand-orange, 
+  a.bg-brand-orange *, 
+  header, 
+  header *, 
+  .bg-brand-orange, 
+  .bg-brand-orange *,
+  .bg-brand-orange-light, 
+  .bg-brand-orange-light *,
+  .bg-emerald-600,
+  .bg-emerald-600 *,
+  .bg-green-600,
+  .bg-green-600 *,
+  .bg-blue-500,
+  .bg-blue-500 *,
+  .bg-amber-500,
+  .bg-amber-500 *,
+  .bg-purple-500,
+  .bg-purple-500 *,
+  .bg-red-500,
+  .bg-red-500 * {
+    color: #ffffff !important;
   }
   
-  /* Inputs style override for organic theme */
+  /* Keep gold and leaf accents clear */
+  .text-brand-gold,
+  .text-brand-gold * {
+    color: #6B9071 !important;
+  }
+
+  /* Inputs style override */
   input, textarea, select {
-    border-color: #C2DCCD !important;
-    color: #1D3525 !important;
+    border-color: #AEC3B0 !important;
+    color: #0F2A1D !important;
     background-color: #FAF8F5 !important;
+    font-weight: 600 !important;
   }
   input:focus, textarea:focus, select:focus {
-    border-color: #2D4A36 !important;
-    outline: none;
+    border-color: #0F2A1D !important;
   }
 }
 
@@ -56,15 +89,7 @@
   animation: slideUp 0.6s ease-out forwards;
 }
 
-/* Custom gradient text for organic theme */
-.gradient-text {
-  background: linear-gradient(135deg, #2D4A36, #5A8F6C, #2D4A36);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Scrollbar styling - organic olive colors */
+/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -74,21 +99,20 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #5A8F6C;
+  background: #375534;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2D4A36;
+  background: #0F2A1D;
 }
 
-/* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;
 }
 
 /* Glassmorphism card adaptation for light theme */
 .backdrop-blur-sm {
-  background-color: rgba(250, 248, 245, 0.9) !important;
-  border-color: rgba(194, 220, 205, 0.5) !important;
+  background-color: rgba(250, 248, 245, 0.95) !important;
+  border-color: rgba(174, 195, 176, 0.5) !important;
 }
