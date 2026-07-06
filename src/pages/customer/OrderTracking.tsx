@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Clock, MapPin, CheckCircle, Flame, Gift } from 'lucide-react';
+import { Clock, MapPin, CheckCircle, Flame, Check } from 'lucide-react';
 import { pb, Order } from '../../api/pocketbase';
 
 const OrderTracking: React.FC = () => {
@@ -25,8 +25,6 @@ const OrderTracking: React.FC = () => {
         return 'Master chefs are blending spices and preparing your gourmet dish right now.';
       case 'Ready':
         return 'Your food is cooked to perfection and packed/plated. Ready to serve!';
-      case 'Out for Delivery':
-        return 'Our delivery agent is bringing the aromatic flavors straight to your doorstep.';
       case 'Delivered':
         return 'Order complete. Enjoy your meal! Please speak with us for any further requests.';
       case 'Cancelled':
@@ -50,7 +48,6 @@ const OrderTracking: React.FC = () => {
         }
       } catch (err) {
         console.warn('PocketBase fetch failed. Checking local mock orders.', err);
-        // Fallback check
         const offlineOrders = JSON.parse(localStorage.getItem('sp_offline_orders') || '[]');
         const found = offlineOrders.find((o: any) => o.id === orderId || o.orderId === orderId);
         if (isSubscribed) {
@@ -64,7 +61,6 @@ const OrderTracking: React.FC = () => {
 
     fetchInitial();
 
-    // Subscribe to PocketBase realtime updates for this order
     let unsubscribeFn: (() => void) | undefined;
     
     pb.collection('orders').subscribe<Order>(orderId, (e) => {
@@ -112,28 +108,27 @@ const OrderTracking: React.FC = () => {
   const currentIdx = getStatusIndex(order.status);
   const isCancelled = order.status === 'Cancelled';
   const activeStatuses = statuses;
-
   const currentActiveIdx = activeStatuses.indexOf(order.status);
 
   return (
     <div className="max-w-3xl mx-auto py-4">
       <div className="text-center mb-10 space-y-2">
         <span className="text-brand-gold font-bold uppercase tracking-widest text-xs">Real-Time Tracker</span>
-        <h1 className="font-serif font-black text-4xl text-white">Track Your Feast</h1>
+        <h1 className="font-serif font-black text-4xl text-brand-orange">Track Your Feast</h1>
         <div className="text-brand-offwhite/60 font-mono text-sm">Order ID: {order.orderId || order.id}</div>
       </div>
 
-      <div className="bg-card-dark border border-brand-maroon-800 rounded-3xl p-8 space-y-8 mb-8">
-        {/* Status explanation */}
-        <div className="flex gap-4 items-start bg-brand-maroon-800/20 border border-brand-maroon-800/40 p-5 rounded-2xl">
-          <div className="bg-brand-orange/10 p-2.5 rounded-xl text-brand-orange shrink-0">
+      <div className="bg-card-dark border border-brand-maroon-800 rounded-3xl p-8 space-y-10 mb-8 shadow-xl">
+        {/* Status explanation header */}
+        <div className="flex gap-4 items-start bg-brand-maroon-900/60 border border-brand-maroon-800 p-5 rounded-2xl">
+          <div className="bg-brand-orange p-3 rounded-xl text-white shrink-0 shadow-md">
             <Clock className="w-6 h-6" />
           </div>
           <div>
-            <h4 className="font-serif text-white font-bold text-lg mb-1">
+            <h4 className="font-serif text-brand-orange font-bold text-xl mb-1">
               {isCancelled ? 'Order Cancelled' : order.status}
             </h4>
-            <p className="text-brand-offwhite/85 text-sm leading-relaxed">
+            <p className="text-brand-offwhite/90 text-sm leading-relaxed">
               {getStatusExplanation(order.status)}
             </p>
           </div>
@@ -141,12 +136,12 @@ const OrderTracking: React.FC = () => {
 
         {/* Step-by-Step progress tracker */}
         {!isCancelled && (
-          <div className="relative flex flex-col md:flex-row justify-between items-center gap-8 py-6">
-            {/* Connector Line */}
-            <div className="absolute top-1/2 left-0 right-0 h-1 bg-brand-maroon-800 -translate-y-1/2 hidden md:block z-0" />
+          <div className="relative flex flex-col md:flex-row justify-between items-center gap-6 py-6 md:px-4">
+            {/* Connector Line - fixed vertical offset to top-5 aligning with circle centers */}
+            <div className="absolute top-[38px] left-[50px] right-[50px] h-1 bg-brand-orange/20 -translate-y-1/2 hidden md:block z-0" />
             <div 
-              className="absolute top-1/2 left-0 h-1 bg-brand-orange -translate-y-1/2 hidden md:block z-0 transition-all duration-500" 
-              style={{ width: `${(currentActiveIdx / (activeStatuses.length - 1)) * 100}%` }}
+              className="absolute top-[38px] left-[50px] h-1 bg-brand-orange -translate-y-1/2 hidden md:block z-0 transition-all duration-500" 
+              style={{ width: `${(currentActiveIdx / (activeStatuses.length - 1)) * 90}%` }}
             />
 
             {activeStatuses.map((step, index) => {
@@ -154,19 +149,21 @@ const OrderTracking: React.FC = () => {
               const isCurrent = index === currentActiveIdx;
 
               return (
-                <div key={step} className="flex md:flex-col items-center gap-4 md:gap-2 relative z-10 w-full md:w-auto">
+                <div key={step} className="flex flex-col items-center relative z-10 flex-1 w-full text-center">
+                  {/* Step Circle */}
                   <div 
                     className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
                       isCompleted 
-                        ? 'bg-brand-orange border-brand-orange text-white' 
-                        : 'bg-brand-maroon-900 border-brand-maroon-800 text-brand-offwhite/40'
-                    } ${isCurrent ? 'ring-4 ring-brand-orange/30 animate-pulse' : ''}`}
+                        ? 'bg-brand-orange border-brand-orange text-white shadow-md' 
+                        : 'bg-brand-maroon-900 border-brand-orange/20 text-brand-offwhite'
+                    } ${isCurrent ? 'ring-4 ring-brand-orange/25 animate-pulse scale-110' : ''}`}
                   >
-                    {isCompleted ? <CheckCircle className="w-5 h-5" /> : <span>{index + 1}</span>}
+                    {isCompleted ? <Check className="w-5 h-5 text-white" /> : <span>{index + 1}</span>}
                   </div>
                   
-                  <div className="text-left md:text-center">
-                    <div className={`font-serif text-sm font-bold ${isCompleted ? 'text-white' : 'text-brand-offwhite/40'}`}>
+                  {/* Step Label */}
+                  <div className="mt-3">
+                    <div className={`font-serif text-sm font-bold ${isCompleted ? 'text-brand-orange' : 'text-brand-offwhite/50'}`}>
                       {step}
                     </div>
                   </div>
@@ -178,43 +175,43 @@ const OrderTracking: React.FC = () => {
       </div>
 
       {/* Summary Recap card */}
-      <div className="bg-brand-maroon-800/10 border border-brand-maroon-800 p-8 rounded-3xl space-y-6">
-        <h3 className="font-serif text-xl font-bold text-white mb-2">Dining Details</h3>
+      <div className="bg-card-dark border border-brand-maroon-800 p-8 rounded-3xl space-y-6 shadow-xl">
+        <h3 className="font-serif text-xl font-bold text-brand-orange mb-2">Dining Details</h3>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-brand-offwhite/80">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-brand-offwhite">
           <div>
             <span className="block text-brand-gold font-bold mb-1">Customer</span>
-            <span className="text-white font-medium">{order.customerName}</span>
+            <span className="text-brand-offwhite font-bold">{order.customerName}</span>
           </div>
           <div>
             <span className="block text-brand-gold font-bold mb-1">Order Type</span>
-            <span className="text-white font-medium uppercase">{order.orderType}</span>
+            <span className="text-brand-offwhite font-bold uppercase">{order.orderType}</span>
           </div>
           {order.addressOrTable && (
             <div>
               <span className="block text-brand-gold font-bold mb-1">
-                {order.orderType === 'Dine In' ? 'Table Number' : 'Delivery Address'}
+                Table Number
               </span>
-              <span className="text-white font-medium">{order.addressOrTable}</span>
+              <span className="text-brand-offwhite font-bold">{order.addressOrTable}</span>
             </div>
           )}
         </div>
 
-        <div className="border-t border-brand-maroon-800/60 pt-4">
-          <h4 className="font-bold text-white mb-3 text-sm">Items Ordered</h4>
+        <div className="border-t border-brand-maroon-800/40 pt-4">
+          <h4 className="font-bold text-brand-orange mb-3 text-sm">Items Ordered</h4>
           <div className="space-y-2">
             {order.items.map((item, idx) => (
               <div key={idx} className="flex justify-between items-center text-sm">
-                <span className="text-brand-offwhite/80">{item.name} <strong className="text-brand-gold">× {item.quantity}</strong></span>
-                <span className="text-white font-bold">₹{item.total}</span>
+                <span className="text-brand-offwhite">{item.name} <strong className="text-brand-gold">× {item.quantity}</strong></span>
+                <span className="text-brand-offwhite font-bold">₹{item.total}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="border-t border-brand-maroon-800/60 pt-4 flex justify-between items-center">
-          <span className="text-brand-gold font-serif font-bold">Total Amount paid/owing</span>
-          <span className="text-xl font-bold text-white">₹{order.totalAmount}</span>
+        <div className="border-t border-brand-maroon-800/40 pt-4 flex justify-between items-center">
+          <span className="text-brand-orange font-serif font-bold">Total Amount paid/owing</span>
+          <span className="text-xl font-bold text-brand-orange">₹{order.totalAmount}</span>
         </div>
       </div>
     </div>
