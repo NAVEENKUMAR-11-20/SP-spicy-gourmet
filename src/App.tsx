@@ -35,13 +35,14 @@ import AddEditFoodItem from './pages/admin/AddEditFoodItem';
 import TableManagement from './pages/admin/TableManagement';
 import Reports from './pages/admin/Reports';
 
-// Auth Guard for admin panel demo bypasses or real pocketbase validation
+// Auth Guard for admin panel demo bypasses or real database validation
 const AdminProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const isMockLogged = localStorage.getItem('sp_mock_logged') === 'true';
-  // Check pocketbase state too
+  // Check pocketbase / supabase local storage states
   const isPBLogged = !!localStorage.getItem('pocketbase_auth');
+  const isSupabaseLogged = Object.keys(localStorage).some(key => key.startsWith('sb-') && key.endsWith('-auth-token'));
   
-  if (!isMockLogged && !isPBLogged) {
+  if (!isMockLogged && !isPBLogged && !isSupabaseLogged) {
     return <Navigate to="/admin/login" replace />;
   }
   return <>{children}</>;

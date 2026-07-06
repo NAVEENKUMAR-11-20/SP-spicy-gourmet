@@ -38,6 +38,13 @@
     color: #ffffff !important;
   }
   
+  /* Force stepper minus and plus SVGs to be dark forest green */
+  [class*="bg-brand-maroon-900"] svg,
+  [class*="bg-brand-maroon-900"] svg * {
+    stroke: #0F2A1D !important;
+    color: #0F2A1D !important;
+  }
+
   /* Keep gold and leaf accents clear */
   .text-brand-gold,
   .text-brand-gold * {

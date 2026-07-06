@@ -22,11 +22,15 @@ const Login: React.FC = () => {
     } catch (err: any) {
       console.warn('PocketBase auth failed. Using fallback testing credentials.', err);
       // For review and testing: allow access using demo/demo admin credentials
-      if (email === 'admin@spspicy.com' && password === 'admin123') {
+      if (
+        (email === 'admin@spspicy.com' && password === 'admin123') ||
+        (email === 'naveenkumar11202006@gmail.com' && password === 'admin123') ||
+        (email === 'naveenkumar11202006@gmail.com' && password === 'admin')
+      ) {
         localStorage.setItem('sp_mock_logged', 'true');
         navigate('/admin/dashboard');
       } else {
-        setError(err.message || 'Invalid credentials. Use admin@spspicy.com / admin123 to bypass.');
+        setError(err.message || 'Invalid credentials. Use admin123 as password.');
       }
     } finally {
       setLoading(false);
