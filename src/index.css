@@ -38,17 +38,16 @@
     color: #ffffff !important;
   }
   
-  /* Make header buttons and SVGs unconditionally white */
+  /* Unconditionally force header buttons and icons to be visible, display correctly, and remain bright white */
   header button,
-  header button *,
-  header svg,
-  header svg path,
-  header svg circle,
-  header svg polyline,
-  header svg line,
-  header svg rect {
-    stroke: #ffffff !important;
+  header button svg,
+  header button svg * {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     color: #ffffff !important;
+    stroke: #ffffff !important;
+    stroke-width: 2.5px !important;
   }
   
   /* Keep logo flame in header gold/green and filled */
