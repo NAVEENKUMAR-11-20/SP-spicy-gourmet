@@ -45,9 +45,9 @@ const AdminLayout: React.FC = () => {
         />
       )}
 
-      {/* Sidebar - responsive container translation */}
+      {/* Sidebar - responsive container translation - styled in organic dark forest green theme */}
       <aside 
-        className={`fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200 flex flex-col justify-between p-6 shrink-0 z-50 transform transition-transform duration-300 lg:translate-x-0 lg:static ${
+        className={`fixed inset-y-0 left-0 w-64 bg-brand-orange border-r border-brand-gold/10 flex flex-col justify-between p-6 shrink-0 z-50 transform transition-transform duration-300 lg:translate-x-0 lg:static ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -55,18 +55,18 @@ const AdminLayout: React.FC = () => {
           {/* Logo & Mobile Close Button */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="bg-emerald-600 p-2.5 rounded-xl text-white">
-                <ChefHat className="w-6 h-6 text-white" />
+              <div className="bg-white/10 p-2.5 rounded-xl text-brand-gold">
+                <ChefHat className="w-6 h-6 text-brand-gold fill-brand-gold" />
               </div>
               <div>
-                <h2 className="font-bold text-gray-900 leading-tight">SP SPICY</h2>
-                <span className="text-xs text-gray-500 font-bold tracking-widest uppercase">Admin Panel</span>
+                <h2 className="font-bold text-white leading-tight font-serif">SP SPICY</h2>
+                <span className="text-[10px] text-brand-gold font-bold tracking-widest uppercase">Admin Panel</span>
               </div>
             </div>
             
             <button 
               onClick={() => setIsSidebarOpen(false)}
-              className="lg:hidden p-1.5 rounded-lg hover:bg-gray-100 text-gray-500"
+              className="lg:hidden p-1.5 rounded-lg hover:bg-white/10 text-white"
             >
               <X className="w-5 h-5" />
             </button>
@@ -85,12 +85,12 @@ const AdminLayout: React.FC = () => {
                   onClick={() => setIsSidebarOpen(false)}
                   className={`flex items-center gap-3 px-4 py-3.5 rounded-xl font-medium text-sm transition-all ${
                     isActive
-                      ? 'bg-emerald-50 text-emerald-700 shadow-sm'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'bg-white/10 text-brand-gold shadow-sm font-bold border border-brand-gold/20'
+                      : 'text-brand-offwhite hover:bg-white/5 hover:text-white'
                   }`}
                 >
-                  <Icon className={`w-5 h-5 ${isActive ? 'text-emerald-600' : 'text-gray-400'}`} />
-                  {item.label}
+                  <Icon className={`w-5 h-5 ${isActive ? 'text-brand-gold' : 'text-brand-offwhite'}`} />
+                  <span className={isActive ? 'text-brand-gold' : 'text-brand-offwhite'}>{item.label}</span>
                 </Link>
               );
             })}
@@ -98,41 +98,41 @@ const AdminLayout: React.FC = () => {
         </div>
 
         {/* Sidebar Footer Logout */}
-        <div className="space-y-4 pt-6 border-t border-gray-100">
+        <div className="space-y-4 pt-6 border-t border-brand-gold/10">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-red-600 hover:bg-red-50 transition-all"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-red-400 hover:bg-white/5 transition-all"
           >
-            <LogOut className="w-5 h-5 text-red-500" />
-            Sign Out
+            <LogOut className="w-5 h-5 text-red-400" />
+            <span className="text-red-400">Sign Out</span>
           </button>
         </div>
       </aside>
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-h-screen min-w-0">
-        {/* Top Header */}
-        <header className="h-16 bg-white border-b border-gray-200 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
+        {/* Top Header - styled in dark forest green (#0F2A1D) to match sidebar and logo visibility */}
+        <header className="h-16 bg-brand-orange border-b border-brand-gold/10 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30 shadow-md">
           <div className="flex items-center gap-3">
             {/* Hamburger button on mobile */}
             <button
               onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-500 shrink-0"
+              className="lg:hidden p-2 rounded-lg hover:bg-white/10 text-white shrink-0"
               aria-label="Open sidebar menu"
             >
-              <Menu className="w-6 h-6" />
+              <Menu className="w-6 h-6 text-white" />
             </button>
             
-            <div className="text-base sm:text-lg font-bold text-gray-800 line-clamp-1">
+            <div className="text-base sm:text-lg font-bold text-white font-serif">
               Welcome, Staff User
             </div>
           </div>
 
           <div className="flex items-center gap-4">
             {/* Live indicator / Notification bell */}
-            <button className="p-2 text-gray-400 hover:text-gray-600 relative rounded-full hover:bg-gray-50">
-              <Bell className="w-6 h-6" />
-              <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white"></span>
+            <button className="p-2 text-white hover:text-brand-gold relative rounded-full hover:bg-white/10">
+              <Bell className="w-6 h-6 text-white" />
+              <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-brand-orange"></span>
             </button>
           </div>
         </header>
