@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    background-color: #E6F2EC !important;
+    color: #1D3525 !important;
+  }
+  
+  /* Force elegant olive green for restaurant headings */
+  h1, h2, h3, h4, h5, h6 {
+    color: #2D4A36 !important;
+  }
+  
+  /* Inputs style override for organic theme */
+  input, textarea, select {
+    border-color: #C2DCCD !important;
+    color: #1D3525 !important;
+    background-color: #FAF8F5 !important;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: #2D4A36 !important;
+    outline: none;
+  }
+}
+
 /* Custom animations */
 @keyframes fadeIn {
   from {
@@ -25,15 +48,6 @@
   }
 }
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
 .animate-fadeIn {
   animation: fadeIn 0.8s ease-out forwards;
 }
@@ -42,88 +56,30 @@
   animation: slideUp 0.6s ease-out forwards;
 }
 
-/* New spicy background animations */
-@keyframes pulse-slow {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.6;
-    transform: scale(1.1);
-  }
+/* Custom gradient text for organic theme */
+.gradient-text {
+  background: linear-gradient(135deg, #2D4A36, #5A8F6C, #2D4A36);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px) translateX(0px);
-  }
-  25% {
-    transform: translateY(-10px) translateX(5px);
-  }
-  50% {
-    transform: translateY(-5px) translateX(-5px);
-  }
-  75% {
-    transform: translateY(-15px) translateX(3px);
-  }
-}
-
-@keyframes spin-slow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes sway {
-  0%, 100% {
-    transform: rotate(-5deg);
-  }
-  50% {
-    transform: rotate(5deg);
-  }
-}
-
-.animate-pulse-slow {
-  animation: pulse-slow 4s ease-in-out infinite;
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-.animate-spin-slow {
-  animation: spin-slow 20s linear infinite;
-}
-
-.animate-sway {
-  animation: sway 8s ease-in-out infinite;
-}
-
-/* Custom gradient utilities */
-.bg-gradient-radial {
-  background: radial-gradient(circle, var(--tw-gradient-stops));
-}
-
-/* Scrollbar styling */
+/* Scrollbar styling - organic olive colors */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1f2937;
+  background: #FAF8F5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4b5563;
+  background: #5A8F6C;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
+  background: #2D4A36;
 }
 
 /* Smooth scroll behavior */
@@ -131,17 +87,8 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Custom gradient text */
-.gradient-text {
-  background: linear-gradient(135deg, #ef4444, #f59e0b, #ef4444);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Backdrop blur fallback */
-@supports not (backdrop-filter: blur(12px)) {
-  .backdrop-blur-sm {
-    background-color: rgba(31, 41, 55, 0.8);
-  }
+/* Glassmorphism card adaptation for light theme */
+.backdrop-blur-sm {
+  background-color: rgba(250, 248, 245, 0.9) !important;
+  border-color: rgba(194, 220, 205, 0.5) !important;
 }

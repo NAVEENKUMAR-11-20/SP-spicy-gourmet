@@ -5,16 +5,16 @@ export default {
     extend: {
       colors: {
         'brand-maroon': {
-          900: '#E6F2EC', // Soft mint / pale sage green background
-          800: '#FAF8F5', // Very light cream section background
+          900: '#E3EED4', // Light mint/cream background (fifth capsule)
+          800: '#FAF8F5', // Off-white cream card background
         },
         'brand-orange': {
-          DEFAULT: '#2D4A36', // Deep olive green (Primary)
-          light: '#5A8F6C', // Fresh leaf green (Secondary)
+          DEFAULT: '#0F2A1D', // Very dark forest green (first capsule)
+          light: '#375534', // Dark moss green (second capsule)
         },
-        'brand-gold': '#417251', // Accent / Natural herb green
-        'brand-offwhite': '#1D3525', // Dark forest green text color
-        'card-dark': 'rgba(250, 248, 245, 0.95)', // Cream card background
+        'brand-gold': '#6B9071', // Sage green accent (third capsule)
+        'brand-offwhite': '#0F2A1D', // Dark forest green text for high readability
+        'card-dark': 'rgba(250, 248, 245, 0.95)', // Cream background
       },
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
@@ -22,8 +22,8 @@ export default {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-brand': 'linear-gradient(to bottom right, #E6F2EC, #FAF8F5)',
-        'gradient-accent': 'linear-gradient(to right, #2D4A36, #5A8F6C)',
+        'gradient-brand': 'linear-gradient(to bottom right, #E3EED4, #FAF8F5)',
+        'gradient-accent': 'linear-gradient(to right, #0F2A1D, #375534)',
       },
       animation: {
         'pulse-slow': 'pulse-slow 4s ease-in-out infinite',
