@@ -44,10 +44,10 @@ const Header: React.FC<HeaderProps> = ({ onOpenNav }) => {
             {/* Cart Icon Trigger */}
             <button
               onClick={() => setIsCartOpen(true)}
-              className="p-2.5 rounded-full hover:bg-white/10 text-white transition-colors relative"
+              className="p-2.5 rounded-full bg-white/10 border border-white/25 text-white hover:bg-white/20 transition-all relative shrink-0 flex items-center justify-center"
               aria-label="Open cart"
             >
-              <ShoppingBag className="w-6 h-6" />
+              <ShoppingBag className="w-6 h-6 text-white" />
               {totalItems > 0 && (
                 <span className="absolute top-0 right-0 bg-brand-gold text-brand-orange text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-brand-orange">
                   {totalItems}
@@ -57,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenNav }) => {
 
             <button 
               onClick={onOpenNav}
-              className="p-2.5 rounded-full hover:bg-white/10 transition-colors group"
+              className="p-2.5 rounded-full bg-white/10 border border-white/25 text-white hover:bg-white/20 transition-all group shrink-0 flex items-center justify-center"
               aria-label="Open menu"
             >
               <Menu className="w-6 h-6 text-white group-hover:text-brand-gold transition-colors" />
