@@ -243,23 +243,13 @@ const OrderDetail: React.FC = () => {
               </button>
             )}
 
-            {order.status === 'Ready' && order.orderType === 'Delivery' && (
-              <button
-                onClick={() => handleStatusChange('Out for Delivery')}
-                disabled={updating}
-                className="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2"
-              >
-                <Truck className="w-5 h-5" /> Mark Out for Delivery
-              </button>
-            )}
-
-            {((order.status === 'Ready' && order.orderType !== 'Delivery') || order.status === 'Out for Delivery') && (
+            {order.status === 'Ready' && (
               <button
                 onClick={() => handleStatusChange('Delivered')}
                 disabled={updating}
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2"
               >
-                <Check className="w-5 h-5" /> Confirm Delivery / Handover
+                <Check className="w-5 h-5" /> Confirm Dine In / Take Away Handover
               </button>
             )}
 

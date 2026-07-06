@@ -89,7 +89,6 @@ const OrdersList: React.FC = () => {
             <option value="Pending">Pending</option>
             <option value="Preparing">Preparing</option>
             <option value="Ready">Ready</option>
-            <option value="Out for Delivery">Out for Delivery</option>
             <option value="Delivered">Delivered</option>
             <option value="Cancelled">Cancelled</option>
           </select>
@@ -104,7 +103,6 @@ const OrdersList: React.FC = () => {
           <option value="All">All Dining Types</option>
           <option value="Dine In">Dine In</option>
           <option value="Take Away">Take Away</option>
-          <option value="Delivery">Delivery</option>
         </select>
       </div>
 

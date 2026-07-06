@@ -149,21 +149,20 @@ const Checkout: React.FC = () => {
                 >
                   <option value="Dine In">Dine In</option>
                   <option value="Take Away">Take Away</option>
-                  <option value="Delivery">Delivery</option>
                 </select>
               </div>
 
-              {orderType !== 'Take Away' && (
+              {orderType === 'Dine In' && (
                 <div>
                   <label className="block text-sm font-medium text-brand-offwhite/80 mb-2">
-                    {orderType === 'Dine In' ? 'Table Number' : 'Delivery Address'}
+                    Table Number
                   </label>
                   <input
                     type="text"
                     required
                     value={addressOrTable}
                     onChange={(e) => setAddressOrTable(e.target.value)}
-                    placeholder={orderType === 'Dine In' ? 'e.g. 4' : 'Address'}
+                    placeholder="e.g. 4"
                     className="w-full bg-brand-maroon-900/50 border border-brand-maroon-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-orange"
                   />
                 </div>

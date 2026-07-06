@@ -107,8 +107,7 @@ const KitchenBoard: React.FC = () => {
   const columns: { title: string; status: Order['status']; bg: string }[] = [
     { title: 'Pending', status: 'Pending', bg: 'bg-gray-100 border-gray-200' },
     { title: 'Preparing', status: 'Preparing', bg: 'bg-yellow-50/50 border-yellow-200' },
-    { title: 'Ready', status: 'Ready', bg: 'bg-blue-50/50 border-blue-200' },
-    { title: 'Out for Delivery', status: 'Out for Delivery', bg: 'bg-purple-50/50 border-purple-200' }
+    { title: 'Ready', status: 'Ready', bg: 'bg-blue-50/50 border-blue-200' }
   ];
 
   return (
@@ -122,7 +121,7 @@ const KitchenBoard: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-6 min-h-0 overflow-y-auto">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 min-h-0 overflow-y-auto">
         {columns.map((col) => {
           const colOrders = orders.filter(o => o.status === col.status);
 

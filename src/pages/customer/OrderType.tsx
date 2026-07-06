@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Utensils, ShoppingBag, Truck, MapPin, Hash, ArrowRight } from 'lucide-react';
+import { Utensils, ShoppingBag, Hash, ArrowRight } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 
 const OrderType: React.FC = () => {
@@ -9,10 +9,9 @@ const OrderType: React.FC = () => {
   const { orderType, setOrderType, addressOrTable, setAddressOrTable } = useCart();
   
   const [tableNum, setTableNum] = useState(orderType === 'Dine In' ? addressOrTable : '');
-  const [address, setAddress] = useState(orderType === 'Delivery' ? addressOrTable : '');
   const [error, setError] = useState('');
 
-  const handleSelect = (type: 'Dine In' | 'Take Away' | 'Delivery') => {
+  const handleSelect = (type: 'Dine In' | 'Take Away') => {
     setOrderType(type);
     setError('');
   };
@@ -24,12 +23,6 @@ const OrderType: React.FC = () => {
         return;
       }
       setAddressOrTable(tableNum);
-    } else if (orderType === 'Delivery') {
-      if (!address.trim()) {
-        setError('Please enter your delivery address.');
-        return;
-      }
-      setAddressOrTable(address);
     } else {
       setAddressOrTable(''); // Take Away
     }
@@ -43,7 +36,7 @@ const OrderType: React.FC = () => {
         <div className="h-1 w-24 bg-brand-gold mx-auto rounded-full"></div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 max-w-2xl mx-auto">
         {/* Dine In */}
         <button
           onClick={() => handleSelect('Dine In')}
@@ -79,24 +72,6 @@ const OrderType: React.FC = () => {
             Skip the queue. Place your order and pick it up when ready.
           </p>
         </button>
-
-        {/* Delivery */}
-        <button
-          onClick={() => handleSelect('Delivery')}
-          className={`flex flex-col items-center gap-4 p-8 rounded-3xl border transition-all ${
-            orderType === 'Delivery'
-              ? 'bg-brand-orange text-white border-brand-orange shadow-lg shadow-brand-orange/15 scale-[1.03]'
-              : 'bg-card-dark/60 border-brand-maroon-800 text-brand-offwhite hover:border-brand-maroon-700'
-          }`}
-        >
-          <div className={`p-4 rounded-full ${orderType === 'Delivery' ? 'bg-white/20 text-white' : 'bg-brand-maroon-900/60 text-brand-gold'}`}>
-            <Truck className="w-8 h-8" />
-          </div>
-          <span className={`font-serif text-2xl font-bold ${orderType === 'Delivery' ? 'text-white' : 'text-brand-orange'}`}>Delivery</span>
-          <p className={`text-sm text-center leading-relaxed ${orderType === 'Delivery' ? 'text-white/80' : 'text-brand-offwhite/70'}`}>
-            Enjoy SP Spicy Gourmet flavors at the comfort of your home.
-          </p>
-        </button>
       </div>
 
       {/* Conditional Forms */}
@@ -118,25 +93,6 @@ const OrderType: React.FC = () => {
               value={tableNum}
               onChange={(e) => setTableNum(e.target.value)}
               className="w-full bg-brand-maroon-900/60 border border-brand-maroon-800 rounded-2xl px-5 py-4 text-brand-orange text-lg focus:outline-none focus:border-brand-orange"
-            />
-          </motion.div>
-        )}
-
-        {orderType === 'Delivery' && (
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-4 bg-brand-maroon-800/20 border border-brand-maroon-800 p-6 rounded-3xl"
-          >
-            <label className="block font-serif text-lg font-bold text-brand-orange mb-2 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-brand-orange" /> Delivery Address
-            </label>
-            <textarea
-              placeholder="Enter your full street address and landmarks"
-              rows={3}
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className="w-full bg-brand-maroon-900/60 border border-brand-maroon-800 rounded-2xl px-5 py-4 text-brand-orange focus:outline-none focus:border-brand-orange resize-none"
             />
           </motion.div>
         )}

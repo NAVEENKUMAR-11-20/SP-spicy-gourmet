@@ -104,7 +104,7 @@ const Reports: React.FC = () => {
           <h3 className="font-serif text-xl font-bold text-gray-900 mb-6">Sales by Dining Type</h3>
           
           <div className="space-y-4">
-            {['Dine In', 'Take Away', 'Delivery'].map((type) => {
+            {['Dine In', 'Take Away'].map((type) => {
               const count = typeCounts[type] || 0;
               const pct = totalOrders > 0 ? (count / totalOrders) * 100 : 0;
               

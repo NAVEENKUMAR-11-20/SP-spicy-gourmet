@@ -10,7 +10,7 @@ const OrderTracking: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   // Status mapping
-  const statuses: Order['status'][] = ['Pending', 'Preparing', 'Ready', 'Out for Delivery', 'Delivered'];
+  const statuses: Order['status'][] = ['Pending', 'Preparing', 'Ready', 'Delivered'];
   
   const getStatusIndex = (currentStatus: Order['status']) => {
     const idx = statuses.indexOf(currentStatus);
@@ -111,11 +111,7 @@ const OrderTracking: React.FC = () => {
 
   const currentIdx = getStatusIndex(order.status);
   const isCancelled = order.status === 'Cancelled';
-  
-  // Filter stages based on type: "Out for Delivery" only applies to Delivery
-  const activeStatuses = order.orderType === 'Delivery' 
-    ? statuses 
-    : statuses.filter(s => s !== 'Out for Delivery');
+  const activeStatuses = statuses;
 
   const currentActiveIdx = activeStatuses.indexOf(order.status);
 
