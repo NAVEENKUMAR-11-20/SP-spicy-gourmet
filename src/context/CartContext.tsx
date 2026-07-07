@@ -1,72 +1,26 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { pb, FoodItem, OrderItem } from '../api/pocketbase';
-import { menuData } from '../data/menuData';
-import { chefSpecials } from '../data/mockData';
+import { supabase } from '../lib/supabase';
 
-// Generate seed list of items from existing mock/menu data
-const getInitialFoodItemsFallback = (): FoodItem[] => {
-  const list: FoodItem[] = [];
-  
-  // Map veg menu
-  menuData.veg.forEach((item) => {
-    list.push({
-      id: `veg-${item.id}`,
-      name: item.name,
-      category: item.category === 'appetizer' ? 'Starters' : item.category === 'dessert' ? 'Desserts' : 'Main Course',
-      description: item.description,
-      price: item.price,
-      image: item.image,
-      vegType: 'Veg',
-      spiceLevel: item.spiceLevel === 1 ? 'Mild' : item.spiceLevel === 2 ? 'Medium' : 'Spicy',
-      isAvailable: true,
-      isChefSpecial: chefSpecials.some(cs => cs.name === item.name),
-    });
-  });
+export interface FoodItem {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  price: number;
+  image: string;
+  vegType: 'Veg' | 'Non-Veg';
+  spiceLevel: 'Mild' | 'Medium' | 'Spicy';
+  isAvailable: boolean;
+  isChefSpecial: boolean;
+}
 
-  // Map non-veg menu
-  menuData['non-veg'].forEach((item) => {
-    list.push({
-      id: `nonveg-${item.id}`,
-      name: item.name,
-      category: item.category === 'appetizer' ? 'Starters' : item.category === 'rice' ? 'Biryani & Rice' : 'Main Course',
-      description: item.description,
-      price: item.price,
-      image: item.image,
-      vegType: 'Non-Veg',
-      spiceLevel: item.spiceLevel === 1 ? 'Mild' : item.spiceLevel === 2 ? 'Medium' : 'Spicy',
-      isAvailable: true,
-      isChefSpecial: chefSpecials.some(cs => cs.name === item.name),
-    });
-  });
-
-  // Add Breads & Beverages fallbacks
-  list.push({
-    id: 'bread-1',
-    name: 'Butter Naan',
-    category: 'Breads',
-    description: 'Soft and fluffy butter-glazed tandoori flatbread.',
-    price: 60,
-    image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?auto=format&fit=crop&q=80',
-    vegType: 'Veg',
-    spiceLevel: 'Mild',
-    isAvailable: true,
-    isChefSpecial: false
-  });
-  list.push({
-    id: 'bev-1',
-    name: 'Mango Lassi',
-    category: 'Beverages',
-    description: 'Refreshing sweet mango-yogurt drink.',
-    price: 120,
-    image: 'https://images.unsplash.com/photo-1541658016709-82535e94bc69?auto=format&fit=crop&q=80',
-    vegType: 'Veg',
-    spiceLevel: 'Mild',
-    isAvailable: true,
-    isChefSpecial: false
-  });
-
-  return list;
-};
+export interface OrderItem {
+  foodId: string;
+  name: string;
+  price: number;
+  quantity: number;
+  total: number;
+}
 
 interface CartItem extends OrderItem {
   image?: string;
@@ -142,20 +96,32 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const refetchFoodItems = async () => {
     setLoadingItems(true);
     try {
-      // Attempt connection to PocketBase
-      const records = await pb.collection('food_items').getFullList<FoodItem>({
-        filter: 'isAvailable = true',
-        sort: 'category',
-      });
-      if (records.length > 0) {
-        setFoodItems(records);
-      } else {
-        // PocketBase connected but collection empty, seed with fallback
-        setFoodItems(getInitialFoodItemsFallback());
+      const { data, error } = await supabase
+        .from('MENUITEMS')
+        .select('*')
+        .order('created_at', { ascending: false });
+        
+      if (error) {
+        console.error(error);
+        setFoodItems([]);
+      } else if (data) {
+        const mappedItems: FoodItem[] = data.map((item: any) => ({
+          id: item.id.toString(),
+          name: item['Dish Name'] || 'Unnamed Dish',
+          category: item['Category'] || 'Uncategorized',
+          description: item['Description'] || '',
+          price: Number(item['Price (INR)']) || 0,
+          image: item['Photo URL'] || '',
+          vegType: item['Vegetarian Type'] || 'Veg',
+          spiceLevel: item['Spice Level'] || 'Mild',
+          isAvailable: true,
+          isChefSpecial: false
+        }));
+        setFoodItems(mappedItems);
       }
     } catch (e) {
-      console.warn('PocketBase disconnected or not initialized. Using menu fallback.', e);
-      setFoodItems(getInitialFoodItemsFallback());
+      console.error('Failed to fetch from Supabase', e);
+      setFoodItems([]);
     } finally {
       setLoadingItems(false);
     }

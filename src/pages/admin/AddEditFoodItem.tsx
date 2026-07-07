@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save } from 'lucide-react';
-import { pb, FoodItem } from '../../api/pocketbase';
-import { useCart } from '../../context/CartContext';
+import { supabase } from '../../lib/supabase';
 
 const AddEditFoodItem: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { refetchFoodItems } = useCart();
 
-  const [name, setName] = useState('');
+  const [dishName, setDishName] = useState('');
   const [category, setCategory] = useState('Starters');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const [image, setImage] = useState('');
-  const [vegType, setVegType] = useState<'Veg' | 'Non-Veg'>('Veg');
-  const [spiceLevel, setSpiceLevel] = useState<'Mild' | 'Medium' | 'Spicy'>('Mild');
-  const [isChefSpecial, setIsChefSpecial] = useState(false);
-  const [isAvailable, setIsAvailable] = useState(true);
+  const [photoUrl, setPhotoUrl] = useState('');
+  const [vegetarianType, setVegetarianType] = useState('Veg');
+  const [spiceLevel, setSpiceLevel] = useState('Mild');
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -29,18 +25,25 @@ const AddEditFoodItem: React.FC = () => {
 
     const fetchItem = async () => {
       try {
-        const item = await pb.collection('food_items').getOne<FoodItem>(id);
-        setName(item.name);
-        setCategory(item.category);
-        setDescription(item.description);
-        setPrice(item.price.toString());
-        setImage(item.image);
-        setVegType(item.vegType);
-        setSpiceLevel(item.spiceLevel);
-        setIsChefSpecial(item.isChefSpecial);
-        setIsAvailable(item.isAvailable);
+        const { data, error } = await supabase
+          .from('MENUITEMS')
+          .select('*')
+          .eq('id', id)
+          .single();
+        
+        if (error) throw error;
+        
+        if (data) {
+          setDishName(data['Dish Name'] || '');
+          setCategory(data['Category'] || 'Starters');
+          setDescription(data['Description'] || '');
+          setPrice(data['Price (INR)']?.toString() || '');
+          setPhotoUrl(data['Photo URL'] || '');
+          setVegetarianType(data['Vegetarian Type'] || 'Veg');
+          setSpiceLevel(data['Spice Level'] || 'Mild');
+        }
       } catch (err) {
-        console.warn('PocketBase item fetch failed. Offline items details mock preview.', err);
+        console.error('Failed to load item:', err);
       }
     };
     fetchItem();
@@ -48,7 +51,7 @@ const AddEditFoodItem: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !price.trim()) {
+    if (!dishName.trim() || !price.trim()) {
       setError('Please fill in name and price.');
       return;
     }
@@ -57,30 +60,33 @@ const AddEditFoodItem: React.FC = () => {
     setError('');
 
     const payload = {
-      name,
-      category,
-      description,
-      price: parseFloat(price),
-      image: image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80',
-      vegType,
-      spiceLevel,
-      isChefSpecial,
-      isAvailable
+      'Dish Name': dishName,
+      'Category': category,
+      'Price (INR)': Number(price),
+      'Description': description,
+      'Photo URL': photoUrl,
+      'Vegetarian Type': vegetarianType,
+      'Spice Level': spiceLevel
     };
 
     try {
       if (isEdit) {
-        await pb.collection('food_items').update(id, payload);
+        const { error: updateError } = await supabase
+          .from('MENUITEMS')
+          .update(payload)
+          .eq('id', id);
+        if (updateError) throw updateError;
       } else {
-        await pb.collection('food_items').create(payload);
+        const { error: insertError } = await supabase
+          .from('MENUITEMS')
+          .insert([payload]);
+        if (insertError) throw insertError;
       }
-      await refetchFoodItems();
+      alert('Item saved successfully!');
       navigate('/admin/menu');
     } catch (err: any) {
-      console.warn('PocketBase save item failed. Displaying simulated confirmation message.', err);
-      // Offline fallback logic: edit/add list representation
-      alert('Save operation completed. PocketBase offline fallbacks logged.');
-      navigate('/admin/menu');
+      console.error(err);
+      setError('Failed to save menu item');
     } finally {
       setLoading(false);
     }
@@ -107,8 +113,8 @@ const AddEditFoodItem: React.FC = () => {
               type="text"
               required
               placeholder="e.g. Paneer Butter Masala"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={dishName}
+              onChange={(e) => setDishName(e.target.value)}
               className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-emerald-500 focus:bg-white"
             />
           </div>
@@ -123,7 +129,7 @@ const AddEditFoodItem: React.FC = () => {
               >
                 <option value="Starters">Starters</option>
                 <option value="Main Course">Main Course</option>
-                <option value="Biryani & Rice">Biryani & Rice</option>
+                <option value="Biryani &amp; Rice">Biryani &amp; Rice</option>
                 <option value="Breads">Breads</option>
                 <option value="Desserts">Desserts</option>
                 <option value="Beverages">Beverages</option>
@@ -159,8 +165,8 @@ const AddEditFoodItem: React.FC = () => {
             <input
               type="url"
               placeholder="https://images.unsplash.com/..."
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
+              value={photoUrl}
+              onChange={(e) => setPhotoUrl(e.target.value)}
               className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-emerald-500 focus:bg-white"
             />
           </div>
@@ -169,8 +175,8 @@ const AddEditFoodItem: React.FC = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Vegetarian Type</label>
               <select
-                value={vegType}
-                onChange={(e) => setVegType(e.target.value as any)}
+                value={vegetarianType}
+                onChange={(e) => setVegetarianType(e.target.value)}
                 className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-emerald-500 focus:bg-white"
               >
                 <option value="Veg">Vegetarian</option>
@@ -182,7 +188,7 @@ const AddEditFoodItem: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">Spice Level</label>
               <select
                 value={spiceLevel}
-                onChange={(e) => setSpiceLevel(e.target.value as any)}
+                onChange={(e) => setSpiceLevel(e.target.value)}
                 className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-emerald-500 focus:bg-white"
               >
                 <option value="Mild">Mild</option>
@@ -190,29 +196,6 @@ const AddEditFoodItem: React.FC = () => {
                 <option value="Spicy">Spicy</option>
               </select>
             </div>
-          </div>
-
-          {/* Toggles */}
-          <div className="flex gap-8 py-2 text-sm">
-            <label className="flex items-center gap-2 cursor-pointer font-semibold text-gray-700">
-              <input
-                type="checkbox"
-                checked={isChefSpecial}
-                onChange={(e) => setIsChefSpecial(e.target.checked)}
-                className="w-4.5 h-4.5 border-gray-300 rounded focus:ring-emerald-500 text-emerald-600"
-              />
-              Chef's Special tonight
-            </label>
-
-            <label className="flex items-center gap-2 cursor-pointer font-semibold text-gray-700">
-              <input
-                type="checkbox"
-                checked={isAvailable}
-                onChange={(e) => setIsAvailable(e.target.checked)}
-                className="w-4.5 h-4.5 border-gray-300 rounded focus:ring-emerald-500 text-emerald-600"
-              />
-              Currently Available
-            </label>
           </div>
 
           {error && <p className="text-red-600 font-bold text-xs">{error}</p>}

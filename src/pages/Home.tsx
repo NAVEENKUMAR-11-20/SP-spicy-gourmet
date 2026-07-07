@@ -2,16 +2,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChefHat, Leaf, ShieldCheck, Users, Flame, Star } from 'lucide-react';
-import { menuData } from '../data/menuData';
+import { useCart } from '../context/CartContext';
 
 const Home: React.FC = () => {
-  // Extract some top picks from menuData
-  const topPicks = [
-    menuData['non-veg'].find(d => d.id === 9), // Butter Chicken Premium
-    menuData.veg.find(d => d.id === 2), // Truffle Mushroom Risotto
-    menuData['non-veg'].find(d => d.id === 13), // Prawn Curry Coastal
-    menuData.veg.find(d => d.id === 8), // Chocolate Lava Cake
-  ].filter(Boolean);
+  const { foodItems, loadingItems } = useCart();
+  
+  // Extract some top picks from fetched items
+  const topPicks = foodItems.slice(0, 4);
 
   return (
     <div className="flex flex-col gap-24 pb-12">

@@ -1,11 +1,20 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Quote, Flame, Clock, Plus, Minus, ShoppingCart } from 'lucide-react';
-import { chefSpecials } from '../data/mockData';
 import { useCart } from '../context/CartContext';
 
 const ChefSpecials: React.FC = () => {
   const { cartItems, addToCart, updateQuantity, foodItems } = useCart();
+  
+  // Use first 3 items as specials since we don't have a chef special column
+  const specials = foodItems.slice(0, 3).map((item, idx) => ({
+    ...item,
+    chefNote: idx === 0 
+      ? "I created this dish to bridge coastal traditions with royal Mughal smoking techniques."
+      : idx === 1 
+      ? "A masterpiece. The earthiness beautifully complements our traditional gravy."
+      : "This recipe has been in my family for four generations. It literally melts in your mouth."
+  }));
 
   return (
     <div className="max-w-5xl mx-auto flex flex-col gap-16">
@@ -18,22 +27,11 @@ const ChefSpecials: React.FC = () => {
       </div>
 
       <div className="flex flex-col gap-16">
-        {chefSpecials.map((special, index) => {
-          // Find matching item in pb fetched/fallback items
-          const matchingItem = foodItems.find(f => f.name === special.name) || {
-            id: `special-${special.id}`,
-            name: special.name,
-            price: special.price,
-            image: special.image,
-            vegType: special.isVeg ? 'Veg' : 'Non-Veg',
-            spiceLevel: special.spiceLevel === 1 ? 'Mild' : special.spiceLevel === 2 ? 'Medium' : 'Spicy',
-            description: special.description,
-            isAvailable: true,
-            isChefSpecial: true
-          };
-
-          const cartItem = cartItems.find((i) => i.foodId === matchingItem.id);
+        {specials.map((special, index) => {
+          const cartItem = cartItems.find((i) => i.foodId === special.id);
           const quantity = cartItem ? cartItem.quantity : 0;
+          const isVeg = special.vegType === 'Veg';
+          const spiceCount = special.spiceLevel === 'Spicy' ? 3 : special.spiceLevel === 'Medium' ? 2 : 1;
 
           return (
             <motion.div 
@@ -71,14 +69,14 @@ const ChefSpecials: React.FC = () => {
                 <div className="flex gap-2 mb-6">
                    {/* Veg/Non-Veg Indicator */}
                   <div className="bg-white/10 p-1.5 rounded flex items-center justify-center">
-                    <div className={`w-2.5 h-2.5 rounded-full border-2 p-[1px] ${special.isVeg ? 'border-green-500' : 'border-red-500'}`}>
-                      <div className={`w-full h-full rounded-full ${special.isVeg ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                    <div className={`w-2.5 h-2.5 rounded-full border-2 p-[1px] ${isVeg ? 'border-green-500' : 'border-red-500'}`}>
+                      <div className={`w-full h-full rounded-full ${isVeg ? 'bg-green-500' : 'bg-red-500'}`}></div>
                     </div>
                   </div>
                   {/* Spice Level */}
-                  {special.spiceLevel > 0 && (
+                  {spiceCount > 0 && (
                     <div className="bg-white/10 px-2 py-1.5 rounded flex items-center gap-0.5">
-                      {Array.from({ length: special.spiceLevel }).map((_, i) => (
+                      {Array.from({ length: spiceCount }).map((_, i) => (
                         <Flame key={i} className="w-3.5 h-3.5 text-brand-orange-light fill-brand-orange-light" />
                       ))}
                     </div>
@@ -104,7 +102,7 @@ const ChefSpecials: React.FC = () => {
                   {quantity > 0 ? (
                     <div className="flex items-center justify-between w-full max-w-[200px] bg-brand-maroon-900 border border-brand-maroon-800 rounded-full p-1">
                       <button
-                        onClick={() => updateQuantity(matchingItem.id, quantity - 1)}
+                        onClick={() => updateQuantity(special.id, quantity - 1)}
                         className="p-2.5 rounded-full hover:bg-white/10 text-brand-orange transition-colors"
                         aria-label="Decrease quantity"
                       >
@@ -112,7 +110,7 @@ const ChefSpecials: React.FC = () => {
                       </button>
                       <span className="font-bold text-white text-base">{quantity}</span>
                       <button
-                        onClick={() => addToCart(matchingItem as any)}
+                        onClick={() => addToCart(special as any)}
                         className="p-2.5 rounded-full hover:bg-white/10 text-brand-orange transition-colors"
                         aria-label="Increase quantity"
                       >
@@ -121,7 +119,7 @@ const ChefSpecials: React.FC = () => {
                     </div>
                   ) : (
                     <button
-                      onClick={() => addToCart(matchingItem as any)}
+                      onClick={() => addToCart(special as any)}
                       className="w-full max-w-[200px] bg-brand-orange hover:bg-brand-orange-light text-white font-serif font-black text-sm py-4 px-6 rounded-full transition-all shadow-md flex items-center justify-center gap-2"
                     >
                       <ShoppingCart className="w-4 h-4" /> Add to Order
@@ -138,3 +136,4 @@ const ChefSpecials: React.FC = () => {
 };
 
 export default ChefSpecials;
+

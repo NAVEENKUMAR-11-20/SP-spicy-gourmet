@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { ArrowLeft, Search, Leaf, ChefHat, Star, Flame } from 'lucide-react';
-import { menuData } from '../data/menuData';
+import { useCart } from '../context/CartContext';
 
 interface MenuDisplayProps {
   menuType: 'veg' | 'non-veg';
@@ -10,8 +10,11 @@ interface MenuDisplayProps {
 
 const MenuDisplay: React.FC<MenuDisplayProps> = ({ menuType, onBack, onSwitchMenu }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const { foodItems } = useCart();
   
-  const currentMenuItems = menuData[menuType];
+  const currentMenuItems = useMemo(() => {
+    return foodItems.filter(item => menuType === 'veg' ? item.vegType === 'Veg' : item.vegType === 'Non-Veg');
+  }, [foodItems, menuType]);
   
   const filteredItems = useMemo(() => {
     if (!searchTerm) return currentMenuItems;
