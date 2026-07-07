@@ -14,7 +14,7 @@ const MenuManagement: React.FC = () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
-        .from('MENUITEMS')
+        .from('menuitems')
         .select('*')
         .order('created_at', { ascending: false });
         
@@ -40,7 +40,7 @@ const MenuManagement: React.FC = () => {
     if (!window.confirm('Are you sure you want to delete this food item?')) return;
 
     try {
-      const { error } = await supabase.from('MENUITEMS').delete().eq('id', id);
+      const { error } = await supabase.from('menuitems').delete().eq('id', id);
       if (error) throw error;
       await fetchItems();
     } catch (e) {

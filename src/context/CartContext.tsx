@@ -97,7 +97,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoadingItems(true);
     try {
       const { data, error } = await supabase
-        .from('MENUITEMS')
+        .from('menuitems')
         .select('*')
         .order('created_at', { ascending: false });
         
