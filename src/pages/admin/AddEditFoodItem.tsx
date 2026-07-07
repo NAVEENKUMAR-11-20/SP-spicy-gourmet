@@ -26,7 +26,7 @@ const AddEditFoodItem: React.FC = () => {
     const fetchItem = async () => {
       try {
         const { data, error } = await supabase
-          .from('MENUITEMS')
+          .from('MENUITEMs')
           .select('*')
           .eq('id', id)
           .single();
@@ -72,13 +72,13 @@ const AddEditFoodItem: React.FC = () => {
     try {
       if (isEdit) {
         const { error: updateError } = await supabase
-          .from('MENUITEMS')
+          .from('MENUITEMs')
           .update(payload)
           .eq('id', id);
         if (updateError) throw updateError;
       } else {
         const { error: insertError } = await supabase
-          .from('MENUITEMS')
+          .from('MENUITEMs')
           .insert([payload]);
         if (insertError) throw insertError;
       }
